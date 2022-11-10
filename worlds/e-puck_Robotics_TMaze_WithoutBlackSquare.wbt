@@ -216,7 +216,7 @@ E-puck {
   hidden rotation_2 0 1 0 2.6225905003801664
   translation 0.009999999999841983 -6.268251058471133e-05 0.3800000002217842
   rotation -0.5737167037878074 0.5791583075591683 0.5791586989591481 2.0998533769098944
-  controller "<none>"
+  controller "no_colour_drive"
   emitter_channel 20
   receiver_channel 19
   groundSensorsSlot [
