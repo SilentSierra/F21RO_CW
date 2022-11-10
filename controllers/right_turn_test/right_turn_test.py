@@ -22,6 +22,7 @@ class Controller:
         self.velocity_left = 0
         self.velocity_right = 0
         
+        # Flag to hold if the black square has been detected.
         self.blackSqaure = False
     
         # Enable Proximity Sensors
