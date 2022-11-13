@@ -5,7 +5,7 @@ sceneTreePerspectives: 000000ff000000010000000300000026000000c0000000fa010000000
 maximizedDockId: -1
 centralWidgetVisible: 1
 orthographicViewHeight: 1
-textFiles: 1 "controllers/colour_copy/colour_copy.py" "controllers/no_colour_drive/no_colour_drive.py"
+textFiles: 1 "../../../F21RO_CW/controllers/colour_copy/colour_copy.py" "../../../F21RO_CW/controllers/no_colour_drive/no_colour_drive.py"
 consoles: Console:All:All
 renderingDevicePerspectives: e-puck:camera;1;1;0;0
 renderingDevicePerspectives: robot:display;1;1;0;0
