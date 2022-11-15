@@ -16,11 +16,11 @@ class Controller:
         ### Add the number of neurons for each layer.
         ### The number of neurons should be in between of 1 to 20.
         ### Number of hidden layers should be one or two.
-        self.number_input_layer = ?
+        self.number_input_layer = 11
         # Example with one hidden layers: self.number_hidden_layer = [5]
         # Example with two hidden layers: self.number_hidden_layer = [7,5]
-        self.number_hidden_layer = [?,..,?] 
-        self.number_output_layer = ?
+        self.number_hidden_layer = [3]
+        self.number_output_layer = 100
         
         # Create a list with the number of neurons per layer
         self.number_neuros_per_layer = []
@@ -133,18 +133,18 @@ class Controller:
     def calculate_fitness(self):
         ### Define the fitness function to increase the speed of the robot and 
         ### to encourage the robot to move forward
-        forwardFitness = ?
+        forwardFitness = 2
                       
         ### Define the fitness function to avoid collision
-        avoidCollisionFitness = ?
+        avoidCollisionFitness = -2
         
         ### Define the fitness function to avoid spining behaviour
-        spinningFitness = ?
+        spinningFitness = 1
          
         ### Define the fitness function of this iteration which should be a combination of the previous functions         
-        combinedFitness = ?
+        combinedFitness = 1
         
-        self.fitness_values.append(combinedFitness)
+        self.fitness_values.append(combinedFitness) 
         self.fitness = np.mean(self.fitness_values) 
 
     def handle_emitter(self):
@@ -206,8 +206,8 @@ class Controller:
             #print("Ground Sensors \n    left {} center {} right {}".format(left,center,right))
                         
             ### Please adjust the ground sensors values to facilitate learning 
-            min_gs = ?
-            max_gs = ?
+            min_gs = 1
+            max_gs = 30
             
             if(left > max_gs): left = max_gs
             if(center > max_gs): center = max_gs
@@ -229,8 +229,8 @@ class Controller:
                     temp = self.proximity_sensors[i].getValue()
                     
                     ### Please adjust the distance sensors values to facilitate learning 
-                    min_ds = ?
-                    max_ds = ?
+                    min_ds = 5
+                    max_ds = 15
                     
                     if(temp > max_ds): temp = max_ds
                     if(temp < min_ds): temp = min_ds
