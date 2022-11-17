@@ -10,7 +10,7 @@ class SupervisorGA:
         # Simulation Parameters
         # Please, do not change these parameters
         self.time_step = 32 # ms
-        self.time_experiment = 60 # s
+        self.time_experiment = 30 # s
         
         # Initiate Supervisor Module
         self.supervisor = Supervisor()
@@ -35,8 +35,8 @@ class SupervisorGA:
         self.emitterData = ""
         
         ### Define here the GA Parameters
-        self.num_generations = 5
-        self.num_population = 5
+        self.num_generations = 3
+        self.num_population = 3
         self.num_elite = 4
         
         # size of the genotype variable

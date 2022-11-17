@@ -145,16 +145,20 @@ class Controller:
         ### Define the fitness function to avoid spining behaviour
         spinningFitness = 1
         if((0 < self.velocity_left < 1) and (0 < self.velocity_right < 1)):
-            spinningFitness += 1
+            spinningFitness -= 1
+        if(self.velocity_left > 0 and self.velocity_right < 0):
+            spinningFitness -= 1
+        if(self.velocity_left < 0 and self.velocity_right > 0):
+            spinningFitness -= 1
         
         # defining a backwards = bad function
-        backwardsFitness = -1
-        if(self.velocity_left < 0 and self.velocity_right < 0):
-            backwardsFitness -= 1
+        #backwardsFitness = -1
+        #if(self.velocity_left < 0 and self.velocity_right < 0):
+        #    backwardsFitness -= 1
         
         
         ### Define the fitness function of this iteration which should be a combination of the previous functions         
-        combinedFitness = forwardFitness + avoidCollisionFitness + spinningFitness + backwardsFitness
+        combinedFitness = forwardFitness + avoidCollisionFitness + spinningFitness# + backwardsFitness
         
         self.fitness_values.append(combinedFitness) 
         self.fitness = np.mean(self.fitness_values) 
