@@ -134,15 +134,27 @@ class Controller:
         ### Define the fitness function to increase the speed of the robot and 
         ### to encourage the robot to move forward
         forwardFitness = 2
+        if(self.velocity_left > 1 and self.velocity_right > 1):
+            forwardFitness += 2
                       
         ### Define the fitness function to avoid collision
         avoidCollisionFitness = -2
+        if(np.max(self.inputs[3:11]) > 0.4):
+            avoidCollisionFitness -= 2
         
         ### Define the fitness function to avoid spining behaviour
         spinningFitness = 1
-         
+        if((0 < self.velocity_left < 1) and (0 < self.velocity_right < 1)):
+            spinningFitness += 1
+        
+        # defining a backwards = bad function
+        backwardsFitness = -1
+        if(self.velocity_left < 0 and self.velocity_right < 0):
+            backwardsFitness -= 1
+        
+        
         ### Define the fitness function of this iteration which should be a combination of the previous functions         
-        combinedFitness = 1
+        combinedFitness = forwardFitness + avoidCollisionFitness + spinningFitness + backwardsFitness
         
         self.fitness_values.append(combinedFitness) 
         self.fitness = np.mean(self.fitness_values) 
@@ -229,8 +241,8 @@ class Controller:
                     temp = self.proximity_sensors[i].getValue()
                     
                     ### Please adjust the distance sensors values to facilitate learning 
-                    min_ds = 5
-                    max_ds = 15
+                    min_ds = 0
+                    max_ds = 2400
                     
                     if(temp > max_ds): temp = max_ds
                     if(temp < min_ds): temp = min_ds
