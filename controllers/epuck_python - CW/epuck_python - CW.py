@@ -10,6 +10,8 @@ class Controller:
         self.robot = robot
         self.time_step = 32 # ms
         self.max_speed = 1  # m/s
+        
+        #supervisor = Supervisor()
  
         # MLP Parameters and Variables   
         ### Define below the architecture of your MLP network. 
@@ -133,29 +135,30 @@ class Controller:
     def calculate_fitness(self):
         ### Define the fitness function to increase the speed of the robot and 
         ### to encourage the robot to move forward
-        forwardFitness = 2
-        if(self.velocity_left > 1 and self.velocity_right > 1):
-            forwardFitness += 2
+        forwardFitness = 0
+       # if(self.velocity_left > 1 and self.velocity_right > 1):
+            #forwardFitness += 2
                       
         ### Define the fitness function to avoid collision
-        avoidCollisionFitness = -2
-        if(np.max(self.inputs[3:11]) > 0.4):
-            avoidCollisionFitness -= 2
+        avoidCollisionFitness = 0
+    #    if(np.max(self.inputs[3:11]) > 0.4):
+            #avoidCollisionFitness -= 2
         
         ### Define the fitness function to avoid spining behaviour
-        spinningFitness = 1
-        if((0 < self.velocity_left < 1) and (0 < self.velocity_right < 1)):
-            spinningFitness -= 1
-        if(self.velocity_left > 0 and self.velocity_right < 0):
-            spinningFitness -= 1
-        if(self.velocity_left < 0 and self.velocity_right > 0):
-            spinningFitness -= 1
+        spinningFitness = 0
+      #  if((0 < self.velocity_left < 1) and (0 < self.velocity_right < 1)):
+            #spinningFitness -= 1
+   #     if(self.velocity_left > 0 and self.velocity_right < 0):
+            #spinningFitness -= 1
+     #   if(self.velocity_left < 0 and self.velocity_right > 0):
+            #spinningFitness -= 1
         
         # defining a backwards = bad function
         #backwardsFitness = -1
         #if(self.velocity_left < 0 and self.velocity_right < 0):
         #    backwardsFitness -= 1
-        
+        #values = self.trans_field.getSFVec3f()
+        #print("ePuck location: %g %g %g" % (values[0], values[1], values[2]))
         
         ### Define the fitness function of this iteration which should be a combination of the previous functions         
         combinedFitness = forwardFitness + avoidCollisionFitness + spinningFitness# + backwardsFitness
