@@ -35,8 +35,8 @@ class SupervisorGA:
         self.emitterData = ""
         
         ### Define here the GA Parameters
-        self.num_generations = 3
-        self.num_population = 3
+        self.num_generations = 10
+        self.num_population = 5
         self.num_elite = 4
         
         # size of the genotype variable
@@ -97,6 +97,8 @@ class SupervisorGA:
         stop = int((seconds*1000)/self.time_step)
         iterations = 0
         while self.supervisor.step(self.time_step) != -1:
+            #values = self.trans_field.getSFVec3f()
+            #print("ePuck location: %g %g %g" % (values[0], values[1], values[2]))
             self.handle_emitter()
             self.handle_receiver()
             if(stop == iterations):
@@ -136,7 +138,17 @@ class SupervisorGA:
             print("Fitness: {}".format(fitness))
             
             # Check for Reward and add it to the fitness value here
-            # ADD CODE HERE
+            values = self.trans_field.getSFVec3f()
+            print("ePuck location: %g %g %g" % (values[0], values[1], values[2]))
+            #if(values[2] < -0.11):
+            #    fitness = fitness + 50
+            #    print("Successful Fitness: {}".format(fitness))
+            if(values[2] > 0.2):
+                fitness = fitness - 3
+                #print("You suck Fitness: {}".format(fitness))
+            fitness = fitness - values[2]*5
+            print("Z-axis-amended Fitness: {}".format(fitness))
+            
             
             # Add fitness value to the vector
             fitnessPerTrial.append(fitness)
@@ -167,7 +179,17 @@ class SupervisorGA:
             print("Fitness: {}".format(fitness))
             
             # Check for Reward and add it to the fitness value here
-            # ADD CODE HERE
+            values = self.trans_field.getSFVec3f()
+            print("ePuck location: %g %g %g" % (values[0], values[1], values[2]))
+            #if(values[2] < -0.11):
+            #    fitness = fitness + 50
+            #    print("Successful Fitness: {}".format(fitness))
+            if(values[2] > 0.3):
+                fitness = fitness - 3
+                #print("You suck Fitness: {}".format(fitness))
+            
+            fitness = fitness - values[2]*5
+            print("Z-axis-amended Fitness: {}".format(fitness))
             
             # Add fitness value to the vector
             fitnessPerTrial.append(fitness)
