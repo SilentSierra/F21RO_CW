@@ -5,7 +5,7 @@ sceneTreePerspectives: 000000ff000000010000000300000026000000c0000000fa010000000
 maximizedDockId: -1
 centralWidgetVisible: 1
 orthographicViewHeight: 1
-textFiles: 0 "controllers/epuck_python - CW/epuck_python - CW.py" "controllers/supervisorGA - CW/supervisorGA - CW.py"
+textFiles: 1 "controllers/epuck_python - CW/epuck_python - CW.py" "controllers/supervisorGA - CW/supervisorGA - CW.py"
 consoles: Console:All:All
 renderingDevicePerspectives: Supervisor:display;1;0.993333;0;0
 renderingDevicePerspectives: e-puck:camera;1;1;0;0

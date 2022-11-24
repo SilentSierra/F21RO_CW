@@ -79,10 +79,6 @@ class Controller:
         # Fitness value (initialization fitness parameters once)
         self.fitness_values = []
         self.fitness = 0
-   #     self.backwardsFitness = -1
-  #      self.forwardFitness = 2
- #       self.avoidCollisionFitness = -2
-#        self.spinningFitness = 1
 
     def check_for_new_genes(self):
         if(self.flagMessage == True):
@@ -158,9 +154,9 @@ class Controller:
                 
         #if(center_ir > 500):
         #    print("WHITE")
-        center = self.center_ir.getValue()
-        if(center < 500):
-            print("GREY")
+        #center = self.center_ir.getValue()
+        #if(center < 500):
+            #print("GREY")
         
         # defining a backwards = bad function
         backwardsFitness = -1
@@ -169,8 +165,8 @@ class Controller:
         
 
         forwardFitness = 0
-       # if(self.velocity_left > 1 and self.velocity_right > 1):
-            #forwardFitness += 2
+        if(self.velocity_left > 1 and self.velocity_right > 1):
+            forwardFitness += 2
                       
         ### Define the fitness function to avoid collision
         avoidCollisionFitness = 0
@@ -179,17 +175,18 @@ class Controller:
         
         ### Define the fitness function to avoid spining behaviour
         spinningFitness = 0
-      #  if((0 < self.velocity_left < 1) and (0 < self.velocity_right < 1)):
-            #spinningFitness -= 1
-   #     if(self.velocity_left > 0 and self.velocity_right < 0):
-            #spinningFitness -= 1
-     #   if(self.velocity_left < 0 and self.velocity_right > 0):
-            #spinningFitness -= 1
+        if((0 < self.velocity_left < 1) and (0 < self.velocity_right < 1)):
+            spinningFitness -= 1
+        if(self.velocity_left > 0 and self.velocity_right < 0):
+            spinningFitness -= 1
+        if(self.velocity_left < 0 and self.velocity_right > 0):
+            spinningFitness -= 1
         
         # defining a backwards = bad function
-        #backwardsFitness = -1
-        #if(self.velocity_left < 0 and self.velocity_right < 0):
-        #    backwardsFitness -= 1
+        backwardsFitness = -1
+        if(self.velocity_left < 0 and self.velocity_right < 0):
+            backwardsFitness -= 1
+            
         #values = self.trans_field.getSFVec3f()
         #print("ePuck location: %g %g %g" % (values[0], values[1], values[2]))
         

@@ -142,22 +142,16 @@ class SupervisorGA:
             
             # Check for Reward and add it to the fitness value here
             # ADD CODE HERE
+
             values = self.trans_field.getSFVec3f()
             #print("ePuck location: %g %g %g" % (values[0], values[1], values[2]))
-            values = self.trans_field.getSFVec3f()
-            print("ePuck location: %g %g %g" % (values[0], values[1], values[2]))
-            #if(values[2] < -0.11):
-            #    fitness = fitness + 50
-            #    print("Successful Fitness: {}".format(fitness))
+
             if(values[2] > 0.2):
                 fitness = fitness - 3
             if(values[2] < 0):
                 fitness = fitness + 3
-                #print("You suck Fitness: {}".format(fitness))
             fitness = fitness - values[2]*10
-            print("Z-axis-amended Fitness: {}".format(fitness))
-                #print("You suck Fitness: {}".format(fitness))
-            fitness = fitness - values[2]*5
+            
             print("Z-axis-amended Fitness: {}".format(fitness))
             
             
@@ -193,26 +187,15 @@ class SupervisorGA:
             # ADD CODE HERE
             values = self.trans_field.getSFVec3f()
             #print("ePuck location: %g %g %g" % (values[0], values[1], values[2]))
-            #if(values[2] < -0.11):
-            #    fitness = fitness + 50
-            #    print("Successful Fitness: {}".format(fitness))
+
             if(values[2] > 0.2):
                 fitness = fitness - 3
-                #print("You suck Fitness: {}".format(fitness))
             if(values[2] < 0):
                 fitness = fitness + 3
             fitness = fitness - values[2]*10
-            values = self.trans_field.getSFVec3f()
-            print("ePuck location: %g %g %g" % (values[0], values[1], values[2]))
-            #if(values[2] < -0.11):
-            #    fitness = fitness + 50
-            #    print("Successful Fitness: {}".format(fitness))
-            if(values[2] > 0.3):
-                fitness = fitness - 3
-                #print("You suck Fitness: {}".format(fitness))
             
-            fitness = fitness - values[2]*5
             print("Z-axis-amended Fitness: {}".format(fitness))
+            
             
             # Add fitness value to the vector
             fitnessPerTrial.append(fitness)
