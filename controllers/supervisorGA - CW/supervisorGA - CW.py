@@ -35,9 +35,9 @@ class SupervisorGA:
         self.emitterData = ""
         
         ### Define here the GA Parameters
-        self.num_generations = 3
+        self.num_generations = 10
         self.num_population = 3
-        self.num_elite = 4
+        self.num_elite = 6
         
         # size of the genotype variable
         self.num_weights = 0
@@ -133,10 +133,22 @@ class SupervisorGA:
         
             # Measure fitness
             fitness = self.receivedFitness
-            print("Fitness: {}".format(fitness))
+            #print("Fitness: {}".format(fitness))
             
             # Check for Reward and add it to the fitness value here
             # ADD CODE HERE
+            values = self.trans_field.getSFVec3f()
+            #print("ePuck location: %g %g %g" % (values[0], values[1], values[2]))
+            #if(values[2] < -0.11):
+            #    fitness = fitness + 50
+            #    print("Successful Fitness: {}".format(fitness))
+            if(values[2] > 0.2):
+                fitness = fitness - 3
+            if(values[2] < 0):
+                fitness = fitness + 3
+                #print("You suck Fitness: {}".format(fitness))
+            fitness = fitness - values[2]*10
+            print("Z-axis-amended Fitness: {}".format(fitness))
             
             # Add fitness value to the vector
             fitnessPerTrial.append(fitness)
@@ -164,10 +176,22 @@ class SupervisorGA:
         
             # Measure fitness
             fitness = self.receivedFitness
-            print("Fitness: {}".format(fitness))
+            #print("Fitness: {}".format(fitness))
             
             # Check for Reward and add it to the fitness value here
             # ADD CODE HERE
+            values = self.trans_field.getSFVec3f()
+            #print("ePuck location: %g %g %g" % (values[0], values[1], values[2]))
+            #if(values[2] < -0.11):
+            #    fitness = fitness + 50
+            #    print("Successful Fitness: {}".format(fitness))
+            if(values[2] > 0.2):
+                fitness = fitness - 3
+                #print("You suck Fitness: {}".format(fitness))
+            if(values[2] < 0):
+                fitness = fitness + 3
+            fitness = fitness - values[2]*10
+            print("Z-axis-amended Fitness: {}".format(fitness))
             
             # Add fitness value to the vector
             fitnessPerTrial.append(fitness)
@@ -220,13 +244,14 @@ class SupervisorGA:
                 #print(fitness)
                 # Save its fitness value
                 current_population.append((genotype,float(fitness)))
-                #print(current_population)
+                #print("Current Pop ", current_population)
                 
             # After checking the fitness value of all indivuals
             # Save genotype of the best individual
             best = ga.getBestGenotype(current_population);
             average = ga.getAverageGenotype(current_population);
             np.save("Best.npy",best[0])
+            #print("Best npy", best)
             self.plot_fitness(generation, best[1], average);
             
             # Generate the new population using genetic operators

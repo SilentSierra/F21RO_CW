@@ -1,4 +1,4 @@
-from controller import Robot, Receiver, Emitter
+from controller import Robot, Receiver, Emitter, GPS
 import sys,struct,math
 import numpy as np
 import mlp as ntw
@@ -77,6 +77,10 @@ class Controller:
         # Fitness value (initialization fitness parameters once)
         self.fitness_values = []
         self.fitness = 0
+   #     self.backwardsFitness = -1
+  #      self.forwardFitness = 2
+ #       self.avoidCollisionFitness = -2
+#        self.spinningFitness = 1
 
     def check_for_new_genes(self):
         if(self.flagMessage == True):
@@ -134,31 +138,36 @@ class Controller:
         ### Define the fitness function to increase the speed of the robot and 
         ### to encourage the robot to move forward
         forwardFitness = 2
-        if(self.velocity_left > 1 and self.velocity_right > 1):
+        if(self.velocity_left > 0 and self.velocity_right > 0):
             forwardFitness += 2
                       
         ### Define the fitness function to avoid collision
-        avoidCollisionFitness = -2
-        if(np.max(self.inputs[3:11]) > 0.4):
-            avoidCollisionFitness -= 2
+        #self.avoidCollisionFitness = -2
+        #if(np.max(self.inputs[3:11]) > 0.4):
+         #   self.avoidCollisionFitness -= 2
         
         ### Define the fitness function to avoid spining behaviour
-        spinningFitness = 1
-        if((0 < self.velocity_left < 1) and (0 < self.velocity_right < 1)):
-            spinningFitness -= 1
+        spinningFitness = -1
         if(self.velocity_left > 0 and self.velocity_right < 0):
-            spinningFitness -= 1
+            spinningFitness -= 2
         if(self.velocity_left < 0 and self.velocity_right > 0):
-            spinningFitness -= 1
+            spinningFitness -= 2
+                
+        #if(center_ir > 500):
+        #    print("WHITE")
+        if(center_ir < 500):
+            print("GREY")
         
         # defining a backwards = bad function
-        #backwardsFitness = -1
-        #if(self.velocity_left < 0 and self.velocity_right < 0):
-        #    backwardsFitness -= 1
+        backwardsFitness = -1
+        if(self.velocity_left < 0 and self.velocity_right < 0):
+            backwardsFitness -= 1
         
         
         ### Define the fitness function of this iteration which should be a combination of the previous functions         
-        combinedFitness = forwardFitness + avoidCollisionFitness + spinningFitness# + backwardsFitness
+        combinedFitness = forwardFitness + spinningFitness + backwardsFitness# + avoidFitness
+        
+#        print(combinedFitness)
         
         self.fitness_values.append(combinedFitness) 
         self.fitness = np.mean(self.fitness_values) 
@@ -223,7 +232,7 @@ class Controller:
                         
             ### Please adjust the ground sensors values to facilitate learning 
             min_gs = 1
-            max_gs = 30
+            max_gs = 1000
             
             if(left > max_gs): left = max_gs
             if(center > max_gs): center = max_gs
