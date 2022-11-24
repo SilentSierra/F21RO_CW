@@ -79,6 +79,7 @@ class Controller:
         # Fitness value (initialization fitness parameters once)
         self.fitness_values = []
         self.fitness = 0
+        self.hintDetected = False
 
     def check_for_new_genes(self):
         if(self.flagMessage == True):
@@ -154,9 +155,10 @@ class Controller:
                 
         #if(center_ir > 500):
         #    print("WHITE")
-        #center = self.center_ir.getValue()
-        #if(center < 500):
+        center = self.center_ir.getValue()
+        if(center < 500):
             #print("GREY")
+            hintDetected = True
         
         # defining a backwards = bad function
         backwardsFitness = -1
