@@ -10,7 +10,9 @@ class Controller:
         # Robot Parameters
         self.robot = robot
         self.time_step = 32 # ms
-        self.max_speed = 1  # m/s
+        self.max_speed = 6  # m/s
+        self.turn_speed = 2.3 # m/s
+        self.no_of_turns = 1 # Number of corners it is to turn
  
         # Enable Motors
         self.left_motor = self.robot.getDevice('left wheel motor')
@@ -21,9 +23,6 @@ class Controller:
         self.right_motor.setVelocity(0.0)
         self.velocity_left = 0
         self.velocity_right = 0
-        
-        # Flag to hold if the black square has been detected.
-        self.blackSqaure = False
     
         # Enable Proximity Sensors
         self.proximity_sensors = []
@@ -44,8 +43,14 @@ class Controller:
         self.inputs = []
         self.inputsPrevious = []
         
-        # Flag
-        self.flag_turn = 0
+        # Flag to hold if the robot is currently turning
+        self.flag_turn = False
+        
+        # Flag to hold if the black square has been detected.
+        self.flag_blackSqaure = False
+        
+        # Flag to hold if the robot has finished
+        self.flag_finished = False
         
     def clip_value(self,value,min_max):
         if (value > min_max):
@@ -57,67 +62,79 @@ class Controller:
     def sense_compute_and_actuate(self, turn_counter):
           
         if(len(self.inputs) > 0 and len(self.inputsPrevious) > 0):
-            # Check for any possible collision
-            
-            if(self.blackSqaure == False):
+            # Check for any possible collisions
+            # Collect data from the left sensors if turning left, right if turning right
+            if(self.flag_blackSqaure == False):
                 wallDetections = np.max(self.inputs[3:11])
-            elif (self.blackSqaure == True):
+            elif (self.flag_blackSqaure == True):
                 wallDetections = np.max(self.inputs[0:3])
-       
+                
+            # If walls are detected
             if(wallDetections > 0.4):
                 # Time
                 time = datetime.now()
+                # Inc turn counter
                 turn_counter = turn_counter + 1
-                if(turn_counter == 2):
-                    print("END OF SIM")
+                # Stop the robot
+                self.velocity_left = 0;
+                self.velocity_right = 0;
                 print("({} - {}) Object or walls detected!".format(time.second, time.microsecond))
-                self.velocity_left = -1;
-                self.velocity_right = -1;
-                self.flag_turn = 1
-                #return turn_counter;
-            # Turn
-            if(self.flag_turn):
-                if(self.blackSqaure == False):
-                    print("Turning Left")
-                    self.velocity_left = -2.3;
-                    self.velocity_right = 2.3;
-                    if(np.min(self.inputs[0:3])< 0.35):
-                        self.flag_turn = 0
+                self.flag_turn = True
+                # If this turn will be more than the number of times it has already turned then don't do anything
+                if(turn_counter > self.no_of_turns):
+                    print("END OF SIM")
+                    self.flag_finished = True;
+                    
+            # If it hasent turned enough then it will turn left if it hasn't found the black square
+            if(self.flag_turn == True and self.flag_finished == False):
+                if(self.flag_blackSqaure == False):
+                     print("Turning Left")
+                     self.velocity_left = -abs(self.turn_speed);
+                     self.velocity_right = self.turn_speed;
+                     if(np.min(self.inputs[0:3])< 0.35):
+                         self.flag_turn = False
                 else:
+                    # If it has found the black square then it turns right
                     print("Turning Right")
-                    self.velocity_left = 2.3;
-                    self.velocity_right = -2.3;
-                    if(np.min(self.inputs[0:3])< 0.35):
-                        self.flag_turn = 0
-            else:        
-                self.velocity_left = 4;
-                self.velocity_right = 4;
-
-     
+                    self.velocity_left = self.turn_speed;
+                    self.velocity_right = -abs(self.turn_speed);
+                    if(np.min(self.inputs[3:11])< 0.35):
+                        self.flag_turn = False
+            elif(self.flag_finished == False):
+               # If no wall is detected travel at max speed
+               self.velocity_left = self.max_speed;
+               self.velocity_right = self.max_speed; 
+               
+        # Set the motors to the newly assinged speed 
         self.left_motor.setVelocity(self.velocity_left)
         self.right_motor.setVelocity(self.velocity_right)
-        
+        return turn_counter
 
     def run_robot(self):        
         # Main Loop
+        # Counter that increases every cycle of the main loop
         count = 0;
+        # Counter that holds the number of turns the robot has made
         turn_counter = 0;
+        # Array that holds all the sensor inputs
         inputs_avg = []
-        self.velocity_left = 4;
-        self.velocity_right = 4;
-        while self.robot.step(self.time_step) != -1:
-            # Read Ground Sensors
+        # Sets the robots motors to the set speed, making it begin moving
+        self.velocity_left = self.max_speed;
+        self.velocity_right = self.max_speed;
+        # Infinite loop
+        while self.robot.step(self.time_step) != -1 and (turn_counter <= self.no_of_turns):
             self.inputs = []
+            # Read Ground Sensors
             left = self.left_ir.getValue()
             center = self.center_ir.getValue()
             right = self.right_ir.getValue()
-            
-            if(center < 500 and self.blackSqaure == False):
-                self.blackSqaure = True
+            # Check for Black Square on Ground
+            if(center < 500 and self.flag_blackSqaure == False):
+                self.flag_blackSqaure = True
                 print("Black Square Detected")
-            
             # Read Distance Sensors
             for i in range(8):
+                # Don't include the two back most sensors, 3 and 4
                 if(i==0 or i==1 or i==2 or i==5 or i==6 or i==7):        
                     temp = self.proximity_sensors[i].getValue()
                     # Adjust Values
@@ -129,24 +146,29 @@ class Controller:
                     self.inputs.append((temp-min_ds)/(max_ds-min_ds))
                     #print("Distance Sensors - Index: {}  Value: {}".format(i,self.proximity_sensors[i].getValue()))
       
-            # Smooth filter (Average)
             smooth = 30
+            # Smooth filter (Average)
             if(count == smooth):
+                # Every 30th cycle compile the sensor inputs
                 inputs_avg = [sum(x) for x in zip(*inputs_avg)]
                 self.inputs = [x/smooth for x in inputs_avg]
-                # Compute and actuate
-                self.sense_compute_and_actuate(turn_counter)
-                # Reset
+                # And run the function to Compute and actuate
+                turn_counter = self.sense_compute_and_actuate(turn_counter)
+                # Reset counter and empty inputs_avg array
                 count = 0
                 inputs_avg = []
                 self.inputsPrevious = self.inputs
             else:
+                # If not the 30th cycle incerease the counter
                 inputs_avg.append(self.inputs)
                 count = count + 1
                 
             
 if __name__ == "__main__":
+    # Creates a new robot
     my_robot = Robot()
+    # Creates a new controller with the new robot
     controller = Controller(my_robot)
+    # Runs the main loop with the new controller
     controller.run_robot()
     
