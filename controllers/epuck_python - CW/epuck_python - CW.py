@@ -139,7 +139,7 @@ class Controller:
     def calculate_fitness(self):
         ### Define the fitness function to increase the speed of the robot and 
         ### to encourage the robot to move forward
-<<<<<<< HEAD
+
         forwardFitness = 2
         if(self.velocity_left > 0 and self.velocity_right > 0):
             forwardFitness += 2
@@ -158,7 +158,8 @@ class Controller:
                 
         #if(center_ir > 500):
         #    print("WHITE")
-        if(center_ir < 500):
+        center = self.center_ir.getValue()
+        if(center < 500):
             print("GREY")
         
         # defining a backwards = bad function
@@ -166,7 +167,7 @@ class Controller:
         if(self.velocity_left < 0 and self.velocity_right < 0):
             backwardsFitness -= 1
         
-=======
+
         forwardFitness = 0
        # if(self.velocity_left > 1 and self.velocity_right > 1):
             #forwardFitness += 2
@@ -191,7 +192,6 @@ class Controller:
         #    backwardsFitness -= 1
         #values = self.trans_field.getSFVec3f()
         #print("ePuck location: %g %g %g" % (values[0], values[1], values[2]))
->>>>>>> 5d1a85041e1e94a49b17959820c5957901a976de
         
         ### Define the fitness function of this iteration which should be a combination of the previous functions         
         combinedFitness = forwardFitness + spinningFitness + backwardsFitness# + avoidFitness
