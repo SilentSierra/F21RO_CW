@@ -43,14 +43,8 @@ class Controller:
         self.inputs = []
         self.inputsPrevious = []
         
-        # Flag to hold if the robot is currently turning
-        self.flag_turn = False
-        
         # Flag to hold if the black square has been detected.
         self.flag_blackSqaure = False
-        
-        # Flag to hold if the robot has finished
-        self.flag_finished = False
         
     def clip_value(self,value,min_max):
         if (value > min_max):
@@ -71,36 +65,29 @@ class Controller:
                 
             # If walls are detected
             if(wallDetections > 0.4):
-                # Time
-                time = datetime.now()
                 # Inc turn counter
                 turn_counter = turn_counter + 1
+                # Time
+                time = datetime.now()
+                print("({} - {}) Object or walls detected!".format(time.second, time.microsecond))
                 # Stop the robot
                 self.velocity_left = 0;
                 self.velocity_right = 0;
-                print("({} - {}) Object or walls detected!".format(time.second, time.microsecond))
-                self.flag_turn = True
                 # If this turn will be more than the number of times it has already turned then don't do anything
                 if(turn_counter > self.no_of_turns):
                     print("END OF SIM")
-                    self.flag_finished = True;
-                    
-            # If it hasent turned enough then it will turn left if it hasn't found the black square
-            if(self.flag_turn == True and self.flag_finished == False):
-                if(self.flag_blackSqaure == False):
-                     print("Turning Left")
-                     self.velocity_left = -abs(self.turn_speed);
-                     self.velocity_right = self.turn_speed;
-                     if(np.min(self.inputs[0:3])< 0.35):
-                         self.flag_turn = False
                 else:
-                    # If it has found the black square then it turns right
-                    print("Turning Right")
-                    self.velocity_left = self.turn_speed;
-                    self.velocity_right = -abs(self.turn_speed);
-                    if(np.min(self.inputs[3:11])< 0.35):
-                        self.flag_turn = False
-            elif(self.flag_finished == False):
+                    # If it has not turned enough and has not found the black square then it turns left
+                    if(self.flag_blackSqaure == False):
+                         print("Turning Left")
+                         self.velocity_left = -abs(self.turn_speed);
+                         self.velocity_right = self.turn_speed;
+                    else:
+                        # If it has found the black square then it turns right
+                        print("Turning Right")
+                        self.velocity_left = self.turn_speed;
+                        self.velocity_right = -abs(self.turn_speed);
+            else:
                # If no wall is detected travel at max speed
                self.velocity_left = self.max_speed;
                self.velocity_right = self.max_speed; 

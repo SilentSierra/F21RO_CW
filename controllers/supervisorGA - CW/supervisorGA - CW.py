@@ -36,8 +36,13 @@ class SupervisorGA:
         
         ### Define here the GA Parameters
         self.num_generations = 10
+<<<<<<< HEAD
         self.num_population = 3
         self.num_elite = 6
+=======
+        self.num_population = 5
+        self.num_elite = 4
+>>>>>>> 5d1a85041e1e94a49b17959820c5957901a976de
         
         # size of the genotype variable
         self.num_weights = 0
@@ -97,6 +102,8 @@ class SupervisorGA:
         stop = int((seconds*1000)/self.time_step)
         iterations = 0
         while self.supervisor.step(self.time_step) != -1:
+            #values = self.trans_field.getSFVec3f()
+            #print("ePuck location: %g %g %g" % (values[0], values[1], values[2]))
             self.handle_emitter()
             self.handle_receiver()
             if(stop == iterations):
@@ -136,19 +143,31 @@ class SupervisorGA:
             #print("Fitness: {}".format(fitness))
             
             # Check for Reward and add it to the fitness value here
+<<<<<<< HEAD
             # ADD CODE HERE
             values = self.trans_field.getSFVec3f()
             #print("ePuck location: %g %g %g" % (values[0], values[1], values[2]))
+=======
+            values = self.trans_field.getSFVec3f()
+            print("ePuck location: %g %g %g" % (values[0], values[1], values[2]))
+>>>>>>> 5d1a85041e1e94a49b17959820c5957901a976de
             #if(values[2] < -0.11):
             #    fitness = fitness + 50
             #    print("Successful Fitness: {}".format(fitness))
             if(values[2] > 0.2):
                 fitness = fitness - 3
+<<<<<<< HEAD
             if(values[2] < 0):
                 fitness = fitness + 3
                 #print("You suck Fitness: {}".format(fitness))
             fitness = fitness - values[2]*10
             print("Z-axis-amended Fitness: {}".format(fitness))
+=======
+                #print("You suck Fitness: {}".format(fitness))
+            fitness = fitness - values[2]*5
+            print("Z-axis-amended Fitness: {}".format(fitness))
+            
+>>>>>>> 5d1a85041e1e94a49b17959820c5957901a976de
             
             # Add fitness value to the vector
             fitnessPerTrial.append(fitness)
@@ -179,6 +198,7 @@ class SupervisorGA:
             #print("Fitness: {}".format(fitness))
             
             # Check for Reward and add it to the fitness value here
+<<<<<<< HEAD
             # ADD CODE HERE
             values = self.trans_field.getSFVec3f()
             #print("ePuck location: %g %g %g" % (values[0], values[1], values[2]))
@@ -191,6 +211,18 @@ class SupervisorGA:
             if(values[2] < 0):
                 fitness = fitness + 3
             fitness = fitness - values[2]*10
+=======
+            values = self.trans_field.getSFVec3f()
+            print("ePuck location: %g %g %g" % (values[0], values[1], values[2]))
+            #if(values[2] < -0.11):
+            #    fitness = fitness + 50
+            #    print("Successful Fitness: {}".format(fitness))
+            if(values[2] > 0.3):
+                fitness = fitness - 3
+                #print("You suck Fitness: {}".format(fitness))
+            
+            fitness = fitness - values[2]*5
+>>>>>>> 5d1a85041e1e94a49b17959820c5957901a976de
             print("Z-axis-amended Fitness: {}".format(fitness))
             
             # Add fitness value to the vector
