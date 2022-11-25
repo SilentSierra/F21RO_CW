@@ -137,9 +137,9 @@ class Controller:
         ### Define the fitness function to increase the speed of the robot and 
         ### to encourage the robot to move forward
 
-        forwardFitness = 2
+        forwardFitness = 0
         if(self.velocity_left > 0 and self.velocity_right > 0):
-            forwardFitness += 2
+            forwardFitness += 5
                       
         ### Define the fitness function to avoid collision
         #self.avoidCollisionFitness = -2
@@ -147,7 +147,7 @@ class Controller:
          #   self.avoidCollisionFitness -= 2
         
         ### Define the fitness function to avoid spining behaviour
-        spinningFitness = -1
+        spinningFitness = 0
         if(self.velocity_left > 0 and self.velocity_right < 0):
             spinningFitness -= 2
         if(self.velocity_left < 0 and self.velocity_right > 0):
@@ -155,20 +155,15 @@ class Controller:
                 
         #if(center_ir > 500):
         #    print("WHITE")
-        center = self.center_ir.getValue()
-        if(center < 500):
+        #center = self.center_ir.getValue()
+        #if(center < 500):
             #print("GREY")
-            hintDetected = True
+            #hintDetected = True
         
         # defining a backwards = bad function
-        backwardsFitness = -1
+        backwardsFitness = 0
         if(self.velocity_left < 0 and self.velocity_right < 0):
-            backwardsFitness -= 1
-        
-
-        forwardFitness = 0
-        if(self.velocity_left > 1 and self.velocity_right > 1):
-            forwardFitness += 2
+            backwardsFitness -= 4
                       
         ### Define the fitness function to avoid collision
         avoidCollisionFitness = 0

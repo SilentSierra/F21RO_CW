@@ -152,10 +152,10 @@ class SupervisorGA:
                 fitness = fitness + 3
             fitness = fitness - values[2]*10
             
-            if(hintDetected == True):
-                fitness = fitness - values[0]*5
-                if(values[0] < -0.3):
-                    fitness + fitness + 5
+            #if(hintDetected == True):
+             #   fitness = fitness - values[0]*5
+              #  if(values[0] < -0.3):
+               #     fitness + fitness + 5
             
             print("Z-axis-amended Fitness: {}".format(fitness))
             
@@ -199,10 +199,10 @@ class SupervisorGA:
                 fitness = fitness + 3
             fitness = fitness - values[2]*10
             
-            if(hintDetected == False):
-                fitness = fitness + values[0]*5
-                if(values[0] > 0.3):
-                    fitness + fitness + 5
+            #if(hintDetected == False):
+             #   fitness = fitness + values[0]*5
+              #  if(values[0] > 0.3):
+               #     fitness + fitness + 5
             
             print("Z-axis-amended Fitness: {}".format(fitness))
             
