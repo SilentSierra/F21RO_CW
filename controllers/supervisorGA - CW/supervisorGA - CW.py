@@ -33,6 +33,7 @@ class SupervisorGA:
         self.receivedWeights = "" 
         self.receivedFitness = "" 
         self.emitterData = ""
+        self.receivedHint = ""
         
         ### Define here the GA Parameters
         self.num_generations = 10
@@ -83,8 +84,14 @@ class SupervisorGA:
             if(typeMessage == "weights"):
                 self.receivedWeights = self.receivedData[9:len(self.receivedData)] 
                 self.num_weights = int(self.receivedWeights)
-            elif(typeMessage == "fitness"):  
+            elif(typeMessage == "nfitnes"):  
                 self.receivedFitness = float(self.receivedData[9:len(self.receivedData)])
+                self.receivedHint = self.receivedData[0]
+                #print("test " + self.receivedHint)
+            elif(typeMessage == "tfitnes"):
+                self.receivedFitness = float(self.receivedData[9:len(self.receivedData)])
+                self.receivedHint = self.receivedData[0]
+                print("test " + self.receivedHint)
             self.receiver.nextPacket()
         
     def handle_emitter(self):
@@ -138,6 +145,7 @@ class SupervisorGA:
         
             # Measure fitness
             fitness = self.receivedFitness
+            hint = self.receivedHint
             #print("Fitness: {}".format(fitness))
             
             # Check for Reward and add it to the fitness value here
@@ -152,12 +160,13 @@ class SupervisorGA:
                 fitness = fitness + 3
             fitness = fitness - values[2]*10
             
-            #if(hintDetected == True):
-             #   fitness = fitness - values[0]*5
-              #  if(values[0] < -0.3):
-               #     fitness + fitness + 5
+            if(hint == "t"):
+                fitness = fitness - values[0]*5
+                if(values[0] < -0.3):
+                    fitness + fitness + 5
             
             print("Z-axis-amended Fitness: {}".format(fitness))
+            print("Hint Detected? " + hint)
             
             
             # Add fitness value to the vector
@@ -180,12 +189,19 @@ class SupervisorGA:
             INITIAL_TRANS = [0.01, -0.1, 0.193]
             self.mark_trans_field.setSFVec3f(INITIAL_TRANS)
             self.mark_node.resetPhysics()
+            
+                                           #                      DONT KEEP, COPIED FROM ABOVE TO FORCE THE SQUARE
+            # Reset the black mark position and physics
+            #INITIAL_TRANS = [0.01, -0.03425, 0.193]
+          #  self.mark_trans_field.setSFVec3f(INITIAL_TRANS)
+          #  self.mark_node.resetPhysics()
         
             # Evaluation genotype 
             self.run_seconds(self.time_experiment)
         
             # Measure fitness
             fitness = self.receivedFitness
+            hint = self.receivedHint
             #print("Fitness: {}".format(fitness))
             
             # Check for Reward and add it to the fitness value here
@@ -199,13 +215,13 @@ class SupervisorGA:
                 fitness = fitness + 3
             fitness = fitness - values[2]*10
             
-            #if(hintDetected == False):
-             #   fitness = fitness + values[0]*5
-              #  if(values[0] > 0.3):
-               #     fitness + fitness + 5
+            #if(hint == "n"):
+                #fitness = fitness + values[0]*5
+                #if(values[0] > 0.3):
+                    #fitness + fitness + 5
             
             print("Z-axis-amended Fitness: {}".format(fitness))
-            
+            print("Hint Detected? " + hint)
             
             # Add fitness value to the vector
             fitnessPerTrial.append(fitness)

@@ -79,7 +79,7 @@ class Controller:
         # Fitness value (initialization fitness parameters once)
         self.fitness_values = []
         self.fitness = 0
-        self.hintDetected = False
+        self.hintDetected = "nfitnes: "
 
     def check_for_new_genes(self):
         if(self.flagMessage == True):
@@ -113,6 +113,7 @@ class Controller:
                 
                 #Reset fitness list
                 self.fitness_values = []
+                self.hintDetected = "nfitnes: "
         
     def clip_value(self,value,min_max):
         if (value > min_max):
@@ -142,9 +143,9 @@ class Controller:
             forwardFitness += 5
                       
         ### Define the fitness function to avoid collision
-        #self.avoidCollisionFitness = -2
+        #avoidCollisionFitness = 0
         #if(np.max(self.inputs[3:11]) > 0.4):
-         #   self.avoidCollisionFitness -= 2
+        #    avoidCollisionFitness -= 2
         
         ### Define the fitness function to avoid spining behaviour
         spinningFitness = 0
@@ -153,44 +154,31 @@ class Controller:
         if(self.velocity_left < 0 and self.velocity_right > 0):
             spinningFitness -= 2
                 
+                
+        #if(swap == True):
+            
         #if(center_ir > 500):
         #    print("WHITE")
-        #center = self.center_ir.getValue()
-        #if(center < 500):
-            #print("GREY")
-            #hintDetected = True
+        #self.hintDetected = "nfitnes: "
+        center = self.center_ir.getValue()
+        if(center < 500):
+            print("GREY")
+            self.hintDetected = "tfitnes: "
+            #swap = True
         
         # defining a backwards = bad function
         backwardsFitness = 0
         if(self.velocity_left < 0 and self.velocity_right < 0):
             backwardsFitness -= 4
                       
-        ### Define the fitness function to avoid collision
-        avoidCollisionFitness = 0
-    #    if(np.max(self.inputs[3:11]) > 0.4):
-            #avoidCollisionFitness -= 2
-        
-        ### Define the fitness function to avoid spining behaviour
-        spinningFitness = 0
-        if((0 < self.velocity_left < 1) and (0 < self.velocity_right < 1)):
-            spinningFitness -= 1
-        if(self.velocity_left > 0 and self.velocity_right < 0):
-            spinningFitness -= 1
-        if(self.velocity_left < 0 and self.velocity_right > 0):
-            spinningFitness -= 1
-        
-        # defining a backwards = bad function
-        backwardsFitness = -1
-        if(self.velocity_left < 0 and self.velocity_right < 0):
-            backwardsFitness -= 1
             
         #values = self.trans_field.getSFVec3f()
         #print("ePuck location: %g %g %g" % (values[0], values[1], values[2]))
         
         ### Define the fitness function of this iteration which should be a combination of the previous functions         
-        combinedFitness = forwardFitness + spinningFitness + backwardsFitness# + avoidFitness
+        combinedFitness = forwardFitness + spinningFitness + backwardsFitness# + avoidCollisionFitness
         
-#        print(combinedFitness)
+        #print(combinedFitness)
         
         self.fitness_values.append(combinedFitness) 
         self.fitness = np.mean(self.fitness_values) 
@@ -206,7 +194,8 @@ class Controller:
 
         # Send the self.fitness value to the supervisor
         data = str(self.fitness)
-        data = "fitness: " + data
+        hint = self.hintDetected
+        data = hint + data
         string_message = str(data)
         string_message = string_message.encode("utf-8")
         #print("Robot send fitness:", string_message)
