@@ -91,7 +91,7 @@ class SupervisorGA:
             elif(typeMessage == "tfitnes"):
                 self.receivedFitness = float(self.receivedData[9:len(self.receivedData)])
                 self.receivedHint = self.receivedData[0]
-                print("test " + self.receivedHint)
+                #print("test " + self.receivedHint)
             self.receiver.nextPacket()
         
     def handle_emitter(self):
@@ -160,10 +160,12 @@ class SupervisorGA:
                 fitness = fitness + 3
             fitness = fitness - values[2]*10
             
-            if(hint == "t"):
-                fitness = fitness - values[0]*5
-                if(values[0] < -0.3):
-                    fitness + fitness + 5
+            #if(hint == "t"):
+             #   fitness = fitness + values[0]*5
+            if(values[0] < -0.3):
+                fitness + fitness + 5
+            if(values[0] > 0.3):
+                fitness + fitness + 5
             
             print("Z-axis-amended Fitness: {}".format(fitness))
             print("Hint Detected? " + hint)

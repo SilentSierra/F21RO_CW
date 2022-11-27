@@ -75,20 +75,22 @@ class Controller:
                 self.velocity_right = 0;
                 # If this turn will be more than the number of times it has already turned then don't do anything
                 if(turn_counter > self.no_of_turns):
-                    print("END OF SIM")
+                    print("Sim ends at: {}-{}".format(time.second, time.microsecond))
                 else:
                     # If it has not turned enough and has not found the black square then it turns left
                     if(self.flag_blackSqaure == False):
-                         print("Turning Left")
+                         print("Turning left at time: {}-{}".format(time.second, time.microsecond))
                          self.velocity_left = -abs(self.turn_speed);
                          self.velocity_right = self.turn_speed;
                     else:
                         # If it has found the black square then it turns right
-                        print("Turning Right")
+                        print("Turning right at time: {}-{}".format(time.second, time.microsecond))
                         self.velocity_left = self.turn_speed;
                         self.velocity_right = -abs(self.turn_speed);
             else:
                # If no wall is detected travel at max speed
+               time = datetime.now()
+               print("Turn complete at: {}-{}".format(time.second, time.microsecond))
                self.velocity_left = self.max_speed;
                self.velocity_right = self.max_speed; 
                
@@ -109,6 +111,8 @@ class Controller:
         self.velocity_left = self.max_speed;
         self.velocity_right = self.max_speed;
         # Infinite loop
+        time = datetime.now()
+        print("Start time is {}-{}".format(time.second, time.microsecond))
         while self.robot.step(self.time_step) != -1 and (turn_counter <= self.no_of_turns):
             self.inputs = []
             # Read Ground Sensors

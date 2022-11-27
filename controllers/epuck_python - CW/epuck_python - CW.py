@@ -143,9 +143,9 @@ class Controller:
             forwardFitness += 5
                       
         ### Define the fitness function to avoid collision
-        #avoidCollisionFitness = 0
-        #if(np.max(self.inputs[3:11]) > 0.4):
-        #    avoidCollisionFitness -= 2
+        avoidCollisionFitness = 0
+        if(np.max(self.inputs[3:11]) > 0.4):
+            avoidCollisionFitness -= 2
         
         ### Define the fitness function to avoid spining behaviour
         spinningFitness = 0
@@ -159,10 +159,15 @@ class Controller:
             
         #if(center_ir > 500):
         #    print("WHITE")
-        #self.hintDetected = "nfitnes: "
+        
+        if(self.velocity_left == 0 and self.velocity_right == 0):
+            self.hintDetected = "nfitnes: "
+        
         center = self.center_ir.getValue()
-        if(center < 500):
-            print("GREY")
+        #print("Motor Speeds: {}".format(self.velocity_left))
+        #print("              {}".format(self.velocity_right))
+        if(center < 350):
+            #print(center)
             self.hintDetected = "tfitnes: "
             #swap = True
         
@@ -176,7 +181,7 @@ class Controller:
         #print("ePuck location: %g %g %g" % (values[0], values[1], values[2]))
         
         ### Define the fitness function of this iteration which should be a combination of the previous functions         
-        combinedFitness = forwardFitness + spinningFitness + backwardsFitness# + avoidCollisionFitness
+        combinedFitness = forwardFitness + spinningFitness + backwardsFitness + avoidCollisionFitness
         
         #print(combinedFitness)
         
