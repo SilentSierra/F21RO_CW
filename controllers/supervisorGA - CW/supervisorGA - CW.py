@@ -10,7 +10,7 @@ class SupervisorGA:
         # Simulation Parameters
         # Please, do not change these parameters
         self.time_step = 32 # ms
-        self.time_experiment = 30 # s
+        self.time_experiment = 60 # s
         
         # Initiate Supervisor Module
         self.supervisor = Supervisor()
@@ -162,12 +162,18 @@ class SupervisorGA:
             
             #if(hint == "t"):
              #   fitness = fitness + values[0]*5
-            if(values[0] < -0.3):
-                fitness + fitness + 5
-            if(values[0] > 0.3):
-                fitness + fitness + 5
             
-            print("Z-axis-amended Fitness: {}".format(fitness))
+            if(values[0] < -0.3):
+                fitness = fitness + 5 #left
+            if(values[0] > 0.3):
+                fitness = fitness + 5 #right
+            
+            if(values[0] > 3):
+                fitness = fitness + values[0]*5 #right
+            else:
+                fitness = fitness - values[0]*5 #left
+            
+            print("Reward-amended Fitness: {}".format(fitness))
             print("Hint Detected? " + hint)
             
             
@@ -217,12 +223,22 @@ class SupervisorGA:
                 fitness = fitness + 3
             fitness = fitness - values[2]*10
             
+            if(values[0] < -0.3):
+                fitness = fitness + 5 #left
+            if(values[0] > 0.3):
+                fitness = fitness + 5 #right
+                
+            if(values[0] > 3):
+                fitness = fitness + values[0]*5 #right
+            else:
+                fitness = fitness - values[0]*5 #left
+            
             #if(hint == "n"):
                 #fitness = fitness + values[0]*5
                 #if(values[0] > 0.3):
                     #fitness + fitness + 5
             
-            print("Z-axis-amended Fitness: {}".format(fitness))
+            print("Reward-amended Fitness: {}".format(fitness))
             print("Hint Detected? " + hint)
             
             # Add fitness value to the vector

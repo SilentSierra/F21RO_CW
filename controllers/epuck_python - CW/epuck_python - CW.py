@@ -164,8 +164,8 @@ class Controller:
             self.hintDetected = "nfitnes: "
         
         center = self.center_ir.getValue()
-        #print("Motor Speeds: {}".format(self.velocity_left))
-        #print("              {}".format(self.velocity_right))
+        #print("Motor Speeds L: {}".format(self.velocity_left))
+        #print("             R: {}".format(self.velocity_right))
         if(center < 350):
             #print(center)
             self.hintDetected = "tfitnes: "
