@@ -36,8 +36,8 @@ class SupervisorGA:
         self.receivedHint = ""
         
         ### Define here the GA Parameters
-        self.num_generations = 10
-        self.num_population = 3
+        self.num_generations = 50 #total generations
+        self.num_population = 4 #run of left and right each
         self.num_elite = 6
 
         self.num_population = 5
@@ -251,7 +251,8 @@ class SupervisorGA:
         
         fitness = np.mean(fitnessPerTrial)
         current = (generation,genotype,fitness)
-        self.genotypes.append(current)  
+#        self.genotypes.append(current)  #original genotypes
+        self.genotypes.append(fitness)
         
         return fitness
 
@@ -306,7 +307,15 @@ class SupervisorGA:
             if (generation < self.num_generations - 1):
                 self.population = ga.population_reproduce(current_population,self.num_elite);
         
-        #print("All Genotypes: {}".format(self.genotypes))
+ #       print("All Genotypes: {}".format(self.genotypes))
+  #      print("Number of genotypes: {}".format(len(self.genotypes)))
+        for i in range(0, int((len(self.genotypes) / 5))):
+            generationArray = []
+            for j in range(0, 5):
+                generationArray.append(self.genotypes[((i*5)+j)])
+            print(generationArray)
+            generationAverage = (generationArray[0] + generationArray[1] + generationArray[2] + generationArray[3] + generationArray[4])/ 5
+            print(generationAverage)
         print("GA optimization terminated.\n")   
     
     
