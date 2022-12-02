@@ -1,0 +1,33 @@
+The controller works by first creating a new robot known as “my_robot” by calling the Robot() function imported.
+
+It then creates a new “controller” object from the “Controller” class, with the “__init__” function setting the robots basic parameters, enabling it’s motors, proximity sensors, ground sensors as well as creating variables to hold the sensor input data (“inputs” and “inputsPrevious”), if the robot is turning (“flag_turn”) and if the robot has crossed the black square (“blackSqaure”).
+
+The “run_robot()” function is then run with this newly created controller which runs the main function.
+
+This then creates variables to count time (“count”), count the number of turns (“turn_counter”), hold the averaged out sensor values (“inputs_avg”). Then setting left and right motors to move at max speed. 
+
+It then enters a loop for the main moving and detecting functionality, looping until it finds the wall after turning. Each loop it:
+
+It reads the ground sensors and checks for black square, if so it flags that it found it with the “flag_blackSqaure” variable.
+
+It then check all but the 2 back proximity sensors and their readings into the “inputs” variable.
+
+Then to allow for a smoother operation it only checks for obstacles every 30th cycle of the loop.
+
+If it isn't the 30th it counts the cycle and saves the inputs into “inputs_ave” and counts the cycle.
+
+If it is then then it computes all the readings saved in the previous cycles and calls “sense_compute_and_actuate()”.
+
+It checks if the black square has been detected and if so notes it has to turn right, if not it notes to turn left.
+
+If a wall is detected using the previously computed input values then stop.
+
+If it hasn’t turned before then turn left or right depending which was noted earlier.
+
+When “sense_compute_and_actuate()” is tun again if not wall is detected then start moving forward again.
+
+If the robot has already turned and it detects the wall again it notes it in “turn_counter” and doesn't turn.
+
+After running “sense_compute_and_actuate()” it resets the cycle counter and inputs.
+
+If the robot has detected the second wall then the “turn_counter” will be 2. If this is the case then the loop is ended and the controlled ends operating with the robot no longer moving.
